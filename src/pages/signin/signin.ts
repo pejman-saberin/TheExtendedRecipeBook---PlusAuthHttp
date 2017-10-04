@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {NgForm} from '@angular/forms';
+import {AuthService} from "../../services/auth";
+
 
 
 @IonicPage()
@@ -9,14 +11,15 @@ import {NgForm} from '@angular/forms';
   templateUrl: 'signin.html',
 })
 export class SigninPage {
+  constructor(private authService: AuthService ) {
+  }
 
   onSignin(form:NgForm){
     console.log(form.value);
   }
 
 
-  constructor( ) {
-  }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SigninPage');
