@@ -17,6 +17,7 @@ export class MyApp {
   tabsPage = TabsPage;
   signinPage=SigninPage;
   signupPage=SignupPage;
+  isAuthenticated=false;
 
 
 
@@ -26,6 +27,16 @@ export class MyApp {
     firebase.initializeApp({
       apiKey: "AIzaSyDaVXoCfCisRwFYgIihU228AC2ksxOwpNU",
       authDomain: "ionic-recipebpook.firebaseapp.com",
+    });
+     //for managing user state
+    firebase.auth().onAuthStateChanged(user=>{
+      if (user){
+        this.isAuthenticated=true;
+        this.nav.setRoot(this.tabsPage);
+      }else{
+        this.isAuthenticated=true;
+        this.nav.setRoot(this.signinPage);
+      }
     });
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
