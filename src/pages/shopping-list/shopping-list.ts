@@ -5,6 +5,7 @@ import {ShoppingListService} from "../../services/shopping-list";
 import {Ingredient} from "../../models/ingredient";
 //import {SLOptionsPage} from "../../pages/shopping-list/sl-options/sl-options";
 import {SLOptionsPage} from "../shopping-list/sl-options/sl-options";
+import {AuthService} from "../../services/Auth";
 /**
  * Generated class for the ShoppingListPage page.
  *
@@ -20,7 +21,8 @@ import {SLOptionsPage} from "../shopping-list/sl-options/sl-options";
 export class ShoppingListPage {
   ListItems: Ingredient[];
 
-  constructor (private slService: ShoppingListService, private popoverCtrl: PopoverController){}
+  constructor (private slService: ShoppingListService, private popoverCtrl: PopoverController,
+               private authService:AuthService){}
   /*
     http://blog.ionic.io/navigating-lifecycle-events/
       ionViewWillEnter: It’s fired when entering a page, before it becomes the active one. Use it for tasks you want to do every time you enter in the view (setting event listeners, updating a table, etc.).
@@ -44,13 +46,22 @@ export class ShoppingListPage {
   }
 
   onCheckItem(index: number){
-    this.slService.removeItem(index);;
+    this.slService.removeItem(index);
     this.loadItems();
   }
 
   onShowOptions (event: MouseEvent){
     const popover=this.popoverCtrl.create(SLOptionsPage); //popover is like a modal
     popover.present({ev:event});
+    popover.onDidDismiss(data=>{
+      if (data.action=='load'){
+
+
+      }else{
+        this.authService.getActiveUser().getToken()
+          .then();
+        }
+    });
   }
 
 
