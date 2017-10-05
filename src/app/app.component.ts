@@ -8,13 +8,14 @@ import firebase from  'firebase';
 import {TabsPage} from "../pages/tabs/tabs";
 import {SigninPage} from "../pages/signin/signin";
 import {SignupPage} from "../pages/signup/signup";
+import {AuthService} from "../services/auth";
 
 //import { HomePage } from '../pages/home/home';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  tabsPage = TabsPage;
+  rootPage:any = TabsPage;  //:any is important, I forgot to add it before, changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
   signinPage=SigninPage;
   signupPage=SignupPage;
   isAuthenticated=false;
@@ -23,7 +24,8 @@ export class MyApp {
 
   @ViewChild('nav')nav: NavController;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuCtrl:MenuController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuCtrl:MenuController,
+              private authService: AuthService) {
     firebase.initializeApp({
       apiKey: "AIzaSyDaVXoCfCisRwFYgIihU228AC2ksxOwpNU",
       authDomain: "ionic-recipebpook.firebaseapp.com",
@@ -32,10 +34,12 @@ export class MyApp {
     firebase.auth().onAuthStateChanged(user=>{
       if (user){
         this.isAuthenticated=true;
-        this.nav.setRoot(this.tabsPage);
+        //this.nav.setRoot(this.tabsPage);
+        this.rootPage=TabsPage;//changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
       }else{
-        this.isAuthenticated=true;
-        this.nav.setRoot(this.signinPage);
+        this.isAuthenticated=false;
+        //this.nav.setRoot(this.signinPage);
+        this.rootPage=SigninPage;//changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
       }
     });
     platform.ready().then(() => {
@@ -52,6 +56,7 @@ export class MyApp {
   }
 
   onLogout(){
-
+    this.authService.logout();
+    this.menuCtrl.close();
   }
 }

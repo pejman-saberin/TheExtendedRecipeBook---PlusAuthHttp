@@ -9,4 +9,8 @@ export class AuthService{
  signin(email: string, password: string){
    return firebase.auth().signInWithEmailAndPassword(email,password);
  }
+
+ logout(){
+   firebase.auth().signOut();  //this will delete the token to log the user out
+ }
 }
