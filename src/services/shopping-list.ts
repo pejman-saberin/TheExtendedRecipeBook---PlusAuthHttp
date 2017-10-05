@@ -1,6 +1,12 @@
 import {Ingredient} from "../models/ingredient";
+import {AuthService} from "../services/auth";
+import { Http, Response } from "@angular/http";
+import {Injectable} from "@angular/core";
+import 'rxjs/Rx';
 
+@Injectable()
 export class ShoppingListService{
+  constructor(private authService:AuthService, private http:Http){}
    private Ingredients: Ingredient[]=[];
 
    addItem (name: string , amount: number){
@@ -18,5 +24,13 @@ export class ShoppingListService{
 
    removeItem(index: number){
      this.Ingredients.splice(index,1);
+   }
+
+   storeList(token:string){
+     const userId=this.authService.getActiveUser().uid;
+     return this.http.put('https://ionic-recipebpook.firebaseio.com/'+ userId + '/shopping-list.json?auth=token', this.Ingredients)//to make it secure send auth ?auth=token
+     .map((response:Response)=>{
+       return response.json();
+     });
    }
 }

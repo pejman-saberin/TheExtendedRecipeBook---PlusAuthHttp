@@ -5,7 +5,7 @@ import {ShoppingListService} from "../../services/shopping-list";
 import {Ingredient} from "../../models/ingredient";
 //import {SLOptionsPage} from "../../pages/shopping-list/sl-options/sl-options";
 import {SLOptionsPage} from "../shopping-list/sl-options/sl-options";
-import {AuthService} from "../../services/Auth";
+import {AuthService} from "../../services/auth";
 /**
  * Generated class for the ShoppingListPage page.
  *
@@ -59,13 +59,19 @@ export class ShoppingListPage {
 
       }else{
         this.authService.getActiveUser().getToken()
-          .then();
+          .then((token: string)=>{
+            this.slService.storeList(token)
+            .subscribe(
+              ()=>console.log ('Success!'),
+              error=>{
+                console.log(error);
+              }
+            );
+
+          });
         }
     });
   }
-
-
-
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShoppingListPage');

@@ -2,6 +2,7 @@ import { Component,ViewChild } from '@angular/core';
 import { Platform, NavController,MenuController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { HttpModule } from '@angular/http';
 import firebase from  'firebase';
 
 
