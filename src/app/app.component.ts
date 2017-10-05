@@ -35,11 +35,11 @@ export class MyApp {
       if (user){
         this.isAuthenticated=true;
         //this.nav.setRoot(this.tabsPage);
-        this.rootPage=TabsPage;//changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
+        this.rootPage=TabsPage;//you can't user nav.setRoot here yet -->changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
       }else{
         this.isAuthenticated=false;
         //this.nav.setRoot(this.signinPage);
-        this.rootPage=SigninPage;//changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
+        this.rootPage=SigninPage;//you can't user nav.setRoot here yet -->changing this to rootpage is important because when firebase makes a call, the call finishes before the page is loaded: video 156
       }
     });
     platform.ready().then(() => {
@@ -58,5 +58,6 @@ export class MyApp {
   onLogout(){
     this.authService.logout();
     this.menuCtrl.close();
+    this.nav.setRoot(SigninPage); //navigate to signin page once you are loggedout
   }
 }
