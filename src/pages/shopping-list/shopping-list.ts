@@ -7,11 +7,11 @@ import {Ingredient} from "../../models/ingredient";
 import {SLOptionsPage} from "../shopping-list/sl-options/sl-options";
 import {AuthService} from "../../services/auth";
 /**
- * Generated class for the ShoppingListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+* Generated class for the ShoppingListPage page.
+*
+* See https://ionicframework.com/docs/components/#navigation for more info on
+* Ionic pages and navigation.
+*/
 
 @IonicPage()
 @Component({
@@ -22,47 +22,63 @@ export class ShoppingListPage {
   ListItems: Ingredient[];
 
   constructor (private slService: ShoppingListService, private popoverCtrl: PopoverController,
-               private authService:AuthService){}
-  /*
+    private authService:AuthService){}
+    /*
     http://blog.ionic.io/navigating-lifecycle-events/
-      ionViewWillEnter: It’s fired when entering a page, before it becomes the active one. Use it for tasks you want to do every time you enter in the view (setting event listeners, updating a table, etc.).
-  */
+    ionViewWillEnter: It’s fired when entering a page, before it becomes the active one. Use it for tasks you want to do every time you enter in the view (setting event listeners, updating a table, etc.).
+    */
 
-  ionViewWillEnter(){
-    this.loadItems();
-  }
+    ionViewWillEnter(){
+      this.loadItems();
+    }
 
-  private loadItems(){
-    this.ListItems=this.slService.getItems();
-  }
-
-
-  onAddItem(form: NgForm){
-    console.log (form);
-    this.slService.addItem(form.value.ingredientName,form.value.amount);
-    form.reset();
-    this.loadItems();
-
-  }
-
-  onCheckItem(index: number){
-    this.slService.removeItem(index);
-    this.loadItems();
-  }
-
-  onShowOptions (event: MouseEvent){
-    const popover=this.popoverCtrl.create(SLOptionsPage); //popover is like a modal
-    popover.present({ev:event});
-    popover.onDidDismiss(data=>{
-      if (data.action=='load'){
+    private loadItems(){
+      this.ListItems=this.slService.getItems();
+    }
 
 
-      }else{
-        this.authService.getActiveUser().getToken()
+    onAddItem(form: NgForm){
+      console.log (form);
+      this.slService.addItem(form.value.ingredientName,form.value.amount);
+      form.reset();
+      this.loadItems();
+
+    }
+
+    onCheckItem(index: number){
+      this.slService.removeItem(index);
+      this.loadItems();
+    }
+
+    onShowOptions (event: MouseEvent){
+      const popover=this.popoverCtrl.create(SLOptionsPage); //popover is like a modal
+      popover.present({ev:event});
+      popover.onDidDismiss(data=>{
+        if (data.action=='load'){
+          this.authService.getActiveUser().getToken()
+          .then((token: string)=>{
+            this.slService.fetchList(token)
+            .subscribe(
+              (list: Ingredient[])=>{
+                if(list){
+                  console.log ('Fetch Success!');
+                  this.ListItems=list;
+                }
+                else {
+                  this.ListItems=[];
+                }
+              },
+              error=>{
+                console.log(error);
+              }
+            );
+          });
+        }else{
+          this.authService.getActiveUser().getToken()
           .then((token: string)=>{
             this.slService.storeList(token)
             .subscribe(
-              ()=>console.log ('Success!'),
+              ()=>console.log ('Store Success!'),
               error=>{
                 console.log(error);
               }
@@ -70,11 +86,11 @@ export class ShoppingListPage {
 
           });
         }
-    });
-  }
+      });
+    }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShoppingListPage');
-  }
+    ionViewDidLoad() {
+      console.log('ionViewDidLoad ShoppingListPage');
+    }
 
-}
+  }

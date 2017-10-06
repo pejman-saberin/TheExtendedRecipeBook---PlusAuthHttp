@@ -33,4 +33,15 @@ export class ShoppingListService{
        return response.json();
      });
    }
+
+   fetchList(token:string){
+     const userId=this.authService.getActiveUser().uid;
+     return this.http.get('https://ionic-recipebpook.firebaseio.com/'+ userId + '/shopping-list.json?auth='+token)
+     .map((response:Response)=>{
+       return response.json();
+     })
+     .do((data)=>{//runs on the resulst of ovservable. it is a listener in between. It allows us to use the response data if someone else subscribes
+       this.Ingredients=data;
+     });
+   }
 }
