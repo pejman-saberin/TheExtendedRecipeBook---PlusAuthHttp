@@ -20,7 +20,7 @@ import { ViewController } from 'ionic-angular';
 
       <ion-row>
         <ion-col>
-          <button ion-button outline (click)="onAction('store')">Load List</button>
+          <button ion-button outline (click)="onAction('store')">Save List</button>
         </ion-col>
       </ion-row>
 

@@ -28,7 +28,7 @@ export class ShoppingListService{
 
    storeList(token:string){
      const userId=this.authService.getActiveUser().uid;
-     return this.http.put('https://ionic-recipebpook.firebaseio.com/'+ userId + '/shopping-list.json?auth=token', this.Ingredients)//to make it secure send auth ?auth=token
+     return this.http.put('https://ionic-recipebpook.firebaseio.com/'+ userId + '/shopping-list.json?auth='+token, this.Ingredients)//to make it secure send auth ?auth=token
      .map((response:Response)=>{
        return response.json();
      });
