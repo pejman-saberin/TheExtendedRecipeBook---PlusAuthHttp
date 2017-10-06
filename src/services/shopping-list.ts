@@ -40,8 +40,12 @@ export class ShoppingListService{
      .map((response:Response)=>{
        return response.json();
      })
-     .do((data)=>{//runs on the resulst of ovservable. it is a listener in between. It allows us to use the response data if someone else subscribes
-       this.Ingredients=data;
+     .do((ingredients: Ingredient[])=>{//runs on the resulst of ovservable. it is a listener in between. It allows us to use the response data if someone else subscribes
+       if(ingredients){
+         this.Ingredients=ingredients;
+       }else{
+         this.Ingredients=[];
+       }
      });
    }
 }

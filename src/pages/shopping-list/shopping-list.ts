@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams,PopoverController,LoadingController
 import {ShoppingListService} from "../../services/shopping-list";
 import {Ingredient} from "../../models/ingredient";
 //import {SLOptionsPage} from "../../pages/shopping-list/sl-options/sl-options";
-import {SLOptionsPage} from "../shopping-list/sl-options/sl-options";
+import {DatabaseOptionsPage} from "../database-options/database-options";
 import {AuthService} from "../../services/auth";
 /**
 * Generated class for the ShoppingListPage page.
@@ -54,7 +54,7 @@ export class ShoppingListPage {
       const loading=this.loadingController.create({
         content: 'Please wait...'
       });
-      const popover=this.popoverCtrl.create(SLOptionsPage); //popover is like a modal
+      const popover=this.popoverCtrl.create(DatabaseOptionsPage); //popover is like a modal
       popover.present({ev:event});
       popover.onDidDismiss(data=>{
         if (data.action=='load'){
