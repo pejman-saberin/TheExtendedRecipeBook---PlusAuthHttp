@@ -50,7 +50,13 @@ export class RecipesService {
         const userId=this.authService.getActiveUser().uid;
         return this.http.get('https://ionic-recipebpook.firebaseio.com/'+ userId + '/recipes.json?auth='+token)
         .map((response:Response)=>{
-          return response.json();
+          const recipes: Recipe[]=response.json()? response.json():[];
+          for (let item of recipes){
+            if(!item.hasOwnProperty('ingredients')){
+              item.ingredients=[];
+            }
+          }
+          return recipes;
         })
         .do((recipes: Recipe[])=>{//runs on the resulst of ovservable. it is a listener in between. It allows us to use the response data if someone else subscribes
           if(recipes){
@@ -59,6 +65,5 @@ export class RecipesService {
             this.recipes=[];
           }
         });
-
       }
     }

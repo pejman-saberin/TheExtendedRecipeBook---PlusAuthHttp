@@ -56,65 +56,69 @@ export class ShoppingListPage {
       });
       const popover=this.popoverCtrl.create(DatabaseOptionsPage); //popover is like a modal
       popover.present({ev:event});
-      popover.onDidDismiss(data=>{
-        if (data.action=='load'){
-          loading.present();
-          this.authService.getActiveUser().getToken()
-          .then((token: string)=>{
-            this.slService.fetchList(token)
-            .subscribe(
-              (list: Ingredient[])=>{
-                loading.dismiss();
-                if(list){
-                  console.log ('Fetch Success!');
-                  this.ListItems=list;
+      popover.onDidDismiss(
+        data=>{
+          if(!data){
+            return;
+          }
+          if (data.action=='load'){
+            loading.present();
+            this.authService.getActiveUser().getToken()
+            .then((token: string)=>{
+              this.slService.fetchList(token)
+              .subscribe(
+                (list: Ingredient[])=>{
+                  loading.dismiss();
+                  if(list){
+                    console.log ('Fetch Success!');
+                    this.ListItems=list;
+                  }
+                  else {
+                    this.ListItems=[];
+                  }
+                },
+                error=>{
+                  loading.dismiss();
+                  this.handleError(error.json().error);
+                  console.log(error);
                 }
-                else {
-                  this.ListItems=[];
+              );
+            });
+          }else if (data.action== 'store'){
+            loading.present();
+            this.authService.getActiveUser().getToken()
+            .then((token: string)=>{
+              this.slService.storeList(token)
+              .subscribe(
+
+                ()=>{
+                  loading.dismiss();
+                  console.log ('Store Success!');
+                },
+                error=>{
+                  loading.dismiss();
+                  this.handleError(error.json().error);
+                  //console.log(error);
                 }
-              },
-              error=>{
-                loading.dismiss();
-                this.handleError(error.json().error);
-                console.log(error);
-              }
-            );
-          });
-        }else if (data.action== 'store'){
-          loading.present();
-          this.authService.getActiveUser().getToken()
-          .then((token: string)=>{
-            this.slService.storeList(token)
-            .subscribe(
+              );
 
-              ()=>{
-                loading.dismiss();
-                console.log ('Store Success!');
-            },
-              error=>{
-                loading.dismiss();
-                this.handleError(error.json().error);
-                //console.log(error);
-              }
-            );
+            });
+          }
+        });
+      }
 
-          });
-        }
-      });
-    }
+      ionViewDidLoad() {
+        console.log('ionViewDidLoad ShoppingListPage');
+      }
 
-    ionViewDidLoad() {
-      console.log('ionViewDidLoad ShoppingListPage');
-    }
+      private handleError(errorMessage: string){
+        const alert=this.alertctrl.create({
+          title: 'An error occured',
+          message:errorMessage,
+          buttons: ['ok']
+        });
+        alert.present();
 
-    private handleError(errorMessage: string){
-      const alert=this.alertctrl.create({
-        title: 'An error occured',
-        message:errorMessage,
-        buttons: ['ok']
-      });
-       alert.present();
+      }
 
     }
-
-  }
